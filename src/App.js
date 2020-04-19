@@ -6,53 +6,71 @@ class App extends Component {
     state = {
         persons: [
             {
+                id: 1,
                 name: "Viral",
                 age: "20",
             },
             {
+                id: 2,
                 name: "Shastri",
-                age: "02",
+                age: "20",
+            },
+            {
+                id: 3,
+                name: "Manish",
+                age: "50",
             },
         ],
         otherState: "Cricket",
+        showPersons: false,
     };
 
-    switchNameHandler = newName => {
-        // console.log('Was clicked!');
-        // DON'T DO THIS: this.state.persons[0].name = 'Maximilian';
-        this.setState({
-            persons: [
-                {
-                    name: this.state.persons[1].name,
-                    age: this.state.persons[1].age,
-                },
-                {
-                    name: this.state.persons[0].name,
-                    age: this.state.persons[0].age,
-                },
-            ],
-        });
+    // switchNameHandler = newName => {
+    //     // console.log('Was clicked!');
+    //     // DON'T DO THIS: this.state.persons[0].name = 'Maximilian';
+    //     this.setState({
+    //         persons: [
+    //             {
+    //                 name: this.state.persons[1].name,
+    //                 age: this.state.persons[1].age,
+    //             },
+    //             {
+    //                 name: this.state.persons[0].name,
+    //                 age: this.state.persons[0].age,
+    //             },
+    //         ],
+    //     });
+    // };
+
+    deletePerson = index => {
+        // const persons = this.state.persons.slice();
+        const persons = [...this.state.persons];
+        persons.splice(index, 1);
+        this.setState({ persons: persons });
     };
 
-    switchChildHandler = newHobbie => {
+    personToggler = () => {
+        const doesShow = this.state.showPersons;
         this.setState({
-            otherState: newHobbie,
+            showPersons: !doesShow,
         });
     };
+    // switchChildHandler = newHobbie => {
+    //     this.setState({
+    //         otherState: newHobbie,
+    //     });
+    // };
 
-    printName = event => {
-        this.setState({
-            persons: [
-                {
-                    name: event.target.value,
-                    age: "20",
-                },
-                {
-                    name: this.state.persons[1].name,
-                    age: "02",
-                },
-            ],
+    switchNameHandler = (event, id) => {
+        const personIndex = this.state.persons.findIndex(p => {
+            return p.id === id;
         });
+        const person = { ...this.state.persons[personIndex] };
+        //const person = Object.assign({}, this.state.persons[personIndex]);
+        person.name = event.target.value;
+        const persons = [...this.state.persons];
+        persons[personIndex] = person;
+        this.setState({ persons: persons });
     };
 
     render() {
@@ -64,29 +82,47 @@ class App extends Component {
             cursor: "pointer",
         };
 
+        let persons = null;
+
+        if (this.state.showPersons) {
+            persons = (
+                <div>
+                    {this.state.persons.map((person, index) => {
+                        return (
+                            <Person
+                                click={() => this.deletePerson(index)}
+                                name={person.name}
+                                age={person.age}
+                                key={person.id}
+                                changed={event => {
+                                    this.switchNameHandler(event, person.id);
+                                }}
+                            />
+                        );
+                    })}
+                    {/* <Person
+                        name={this.state.persons[0].name}
+                        age={this.state.persons[0].age}
+                        changed={this.printName}
+                    />
+                    <Person
+                        name={this.state.persons[1].name}
+                        age={this.state.persons[1].age}
+                        click={this.switchChildHandler.bind(this, "Tennis")}
+                    >
+                        {this.state.otherState}
+                    </Person> */}
+                </div>
+            );
+        }
+
         return (
             <div className="App">
                 <h1>Hi, I'm a React App</h1>
                 <p>This is really working!</p>
-
-                <Person
-                    name={this.state.persons[0].name}
-                    age={this.state.persons[0].age}
-                    changed={this.printName}
-                />
-                <Person
-                    name={this.state.persons[1].name}
-                    age={this.state.persons[1].age}
-                    click={this.switchChildHandler.bind(this, "Tennis")}
-                >
-                    {this.state.otherState}
-                </Person>
-
-                <button
-                    style={style}
-                    onClick={() => this.switchNameHandler("Shastri")}
-                >
-                    Switch Card
+                {persons}
+                <button style={style} onClick={this.personToggler}>
+                    Show Card
                 </button>
             </div>
             //  --- JSX TO JS COMPLIED CODE ---
