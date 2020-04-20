@@ -1,7 +1,23 @@
 import React, { Component } from "react";
-import Radium, { StyleRoot } from "radium";
 import "./App.css";
 import Person from "./Person/Person";
+import styled from "styled-components";
+
+const StyledButton = styled.button`
+    background-color: ${props => (props.alt ? "red" : "green")};
+    font: inherit;
+    color: white;
+    border: 1px solid White;
+    padding: 8px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${props => {
+            return props.alt ? "salmon" : "lightgreen";
+        }};
+        color: black;
+    }
+`;
 
 class App extends Component {
     state = {
@@ -53,24 +69,27 @@ class App extends Component {
     };
 
     render() {
-        const style = {
-            backgroundColor: "Green",
-            font: "inherit",
-            color: "white",
-            border: "1px solid White",
-            padding: "8px",
-            cursor: "pointer",
-            ":hover": {
-                backgroundColor: "lightgreen",
-                color: "black",
-            },
-        };
+        // const style = {
+        //     backgroundColor: "Green",
+        //     font: "inherit",
+        //     color: "white",
+        //     border: "1px solid White",
+        //     padding: "8px",
+        //     cursor: "pointer",
+        //     ":hover": {
+        //         backgroundColor: "lightgreen",
+        //         color: "black",
+        //     },
+        // };
 
         let persons = null;
         let button = (
-            <button style={style} onClick={this.personToggler}>
+            <StyledButton
+                alt={this.state.showPersons}
+                onClick={this.personToggler}
+            >
                 Show Cards
-            </button>
+            </StyledButton>
         );
 
         if (this.state.showPersons) {
@@ -91,16 +110,19 @@ class App extends Component {
                     })}
                 </div>
             );
-            style.backgroundColor = "Red";
-            style[":hover"] = {
-                backgroundColor: "salmon",
-                color: "black",
-            };
+            // style.backgroundColor = "Red";
+            // style[":hover"] = {
+            //     backgroundColor: "salmon",
+            //     color: "black",
+            // };
 
             button = (
-                <button style={style} onClick={this.personToggler}>
+                <StyledButton
+                    alt={this.state.showPersons}
+                    onClick={this.personToggler}
+                >
                     Hide Cards
-                </button>
+                </StyledButton>
             );
         }
 
@@ -113,19 +135,17 @@ class App extends Component {
         }
 
         return (
-            <StyleRoot>
-                <div className="App">
-                    <h1>Hi, I'm a React App</h1>
-                    <p className={classes.join(" ")}>This is really working!</p>
-                    {persons}
-                    {button}
-                </div>
-            </StyleRoot>
+            <div className="App">
+                <h1>Hi, I'm a React App</h1>
+                <p className={classes.join(" ")}>This is really working!</p>
+                {persons}
+                {button}
+            </div>
         );
     }
 }
 
-export default Radium(App);
+export default App;
 
 // import React, { useState } from "react";
 // import "./App.css";
