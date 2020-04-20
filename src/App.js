@@ -1,23 +1,6 @@
 import React, { Component } from "react";
-import "./App.css";
+import classes from "./App.css";
 import Person from "./Person/Person";
-import styled from "styled-components";
-
-const StyledButton = styled.button`
-    background-color: ${props => (props.alt ? "red" : "green")};
-    font: inherit;
-    color: white;
-    border: 1px solid White;
-    padding: 8px;
-    cursor: pointer;
-
-    &:hover {
-        background-color: ${props => {
-            return props.alt ? "salmon" : "lightgreen";
-        }};
-        color: black;
-    }
-`;
 
 class App extends Component {
     state = {
@@ -69,27 +52,11 @@ class App extends Component {
     };
 
     render() {
-        // const style = {
-        //     backgroundColor: "Green",
-        //     font: "inherit",
-        //     color: "white",
-        //     border: "1px solid White",
-        //     padding: "8px",
-        //     cursor: "pointer",
-        //     ":hover": {
-        //         backgroundColor: "lightgreen",
-        //         color: "black",
-        //     },
-        // };
-
         let persons = null;
         let button = (
-            <StyledButton
-                alt={this.state.showPersons}
-                onClick={this.personToggler}
-            >
+            <button alt={this.state.showPersons} onClick={this.personToggler}>
                 Show Cards
-            </StyledButton>
+            </button>
         );
 
         if (this.state.showPersons) {
@@ -110,34 +77,34 @@ class App extends Component {
                     })}
                 </div>
             );
-            // style.backgroundColor = "Red";
-            // style[":hover"] = {
-            //     backgroundColor: "salmon",
-            //     color: "black",
-            // };
+
+            const btnClass = classes.Red;
 
             button = (
-                <StyledButton
+                <button
                     alt={this.state.showPersons}
                     onClick={this.personToggler}
+                    className={btnClass}
                 >
                     Hide Cards
-                </StyledButton>
+                </button>
             );
         }
 
-        const classes = [];
+        const assignedClasses = [];
         if (this.state.persons.length <= 2) {
-            classes.push("red");
+            assignedClasses.push(classes.red);
         }
         if (this.state.persons.length <= 1) {
-            classes.push("bold");
+            assignedClasses.push(classes.bold);
         }
 
         return (
-            <div className="App">
+            <div className={classes.App}>
                 <h1>Hi, I'm a React App</h1>
-                <p className={classes.join(" ")}>This is really working!</p>
+                <p className={assignedClasses.join(" ")}>
+                    This is really working!
+                </p>
                 {persons}
                 {button}
             </div>
