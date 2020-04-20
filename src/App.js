@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Radium, { StyleRoot } from "radium";
 import "./App.css";
 import Person from "./Person/Person";
 
@@ -25,23 +26,6 @@ class App extends Component {
         showPersons: false,
     };
 
-    // switchNameHandler = newName => {
-    //     // console.log('Was clicked!');
-    //     // DON'T DO THIS: this.state.persons[0].name = 'Maximilian';
-    //     this.setState({
-    //         persons: [
-    //             {
-    //                 name: this.state.persons[1].name,
-    //                 age: this.state.persons[1].age,
-    //             },
-    //             {
-    //                 name: this.state.persons[0].name,
-    //                 age: this.state.persons[0].age,
-    //             },
-    //         ],
-    //     });
-    // };
-
     deletePerson = index => {
         // const persons = this.state.persons.slice();
         const persons = [...this.state.persons];
@@ -55,11 +39,6 @@ class App extends Component {
             showPersons: !doesShow,
         });
     };
-    // switchChildHandler = newHobbie => {
-    //     this.setState({
-    //         otherState: newHobbie,
-    //     });
-    // };
 
     switchNameHandler = (event, id) => {
         const personIndex = this.state.persons.findIndex(p => {
@@ -75,14 +54,24 @@ class App extends Component {
 
     render() {
         const style = {
-            backgroundColor: "White",
+            backgroundColor: "Green",
             font: "inherit",
-            border: "1px solid black",
+            color: "white",
+            border: "1px solid White",
             padding: "8px",
             cursor: "pointer",
+            ":hover": {
+                backgroundColor: "lightgreen",
+                color: "black",
+            },
         };
 
         let persons = null;
+        let button = (
+            <button style={style} onClick={this.personToggler}>
+                Show Cards
+            </button>
+        );
 
         if (this.state.showPersons) {
             persons = (
@@ -100,42 +89,43 @@ class App extends Component {
                             />
                         );
                     })}
-                    {/* <Person
-                        name={this.state.persons[0].name}
-                        age={this.state.persons[0].age}
-                        changed={this.printName}
-                    />
-                    <Person
-                        name={this.state.persons[1].name}
-                        age={this.state.persons[1].age}
-                        click={this.switchChildHandler.bind(this, "Tennis")}
-                    >
-                        {this.state.otherState}
-                    </Person> */}
                 </div>
+            );
+            style.backgroundColor = "Red";
+            style[":hover"] = {
+                backgroundColor: "salmon",
+                color: "black",
+            };
+
+            button = (
+                <button style={style} onClick={this.personToggler}>
+                    Hide Cards
+                </button>
             );
         }
 
+        const classes = [];
+        if (this.state.persons.length <= 2) {
+            classes.push("red");
+        }
+        if (this.state.persons.length <= 1) {
+            classes.push("bold");
+        }
+
         return (
-            <div className="App">
-                <h1>Hi, I'm a React App</h1>
-                <p>This is really working!</p>
-                {persons}
-                <button style={style} onClick={this.personToggler}>
-                    Show Card
-                </button>
-            </div>
-            //  --- JSX TO JS COMPLIED CODE ---
-            //  React.createElement(
-            //  "div",
-            //    { className: "App" },
-            //  React.createElement("p", null, "I know that Mothefucke")
-            //   )
+            <StyleRoot>
+                <div className="App">
+                    <h1>Hi, I'm a React App</h1>
+                    <p className={classes.join(" ")}>This is really working!</p>
+                    {persons}
+                    {button}
+                </div>
+            </StyleRoot>
         );
     }
 }
 
-export default App;
+export default Radium(App);
 
 // import React, { useState } from "react";
 // import "./App.css";
@@ -189,3 +179,50 @@ export default App;
 // };
 
 // export default app;
+
+// Render()
+
+/* <Person
+name={this.state.persons[0].name}
+age={this.state.persons[0].age}
+changed={this.printName}
+/>
+<Person
+name={this.state.persons[1].name}
+age={this.state.persons[1].age}
+click={this.switchChildHandler.bind(this, "Tennis")}
+>
+{this.state.otherState}
+</Person> */
+
+//  --- JSX TO JS COMPLIED CODE ---
+//  React.createElement(
+//  "div",
+//    { className: "App" },
+//  React.createElement("p", null, "I know that Mothefucke")
+//   )
+
+// Class Methods
+
+// switchNameHandler = newName => {
+//     // console.log('Was clicked!');
+//     // DON'T DO THIS: this.state.persons[0].name = 'Maximilian';
+//     this.setState({
+//         persons: [
+//             {
+//                 name: this.state.persons[1].name,
+//                 age: this.state.persons[1].age,
+//             },
+//             {
+//                 name: this.state.persons[0].name,
+//                 age: this.state.persons[0].age,
+//             },
+//         ],
+//     });
+// };
+
+// switchChildHandler = newHobbie => {
+//     this.setState({
+//         otherState: newHobbie,
+//     });
+// };
